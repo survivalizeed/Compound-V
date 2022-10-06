@@ -31,7 +31,6 @@ autoshoot = True
 # If set to True your weapon will automatically scope as soon as you lock onto a target
 autoscope = True
 
-# having one of the two options above enabled or disabled does not make a lot of sense.
 
 # Aim Location Options
 # Aim Location Switching (default is the first one listed)
