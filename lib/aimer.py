@@ -4,6 +4,7 @@ import time
 import math
 from ctypes import *
 from pynput.mouse import Button, Controller
+from multiprocessing import Pool
 
 debug = 1
 
@@ -78,6 +79,9 @@ class Aimer:
         # m = Mouse()
         mouse = Controller()
         pressed = False
+        pressedL = False
+        pool = Pool(processes=1)  
+
         while 1:
 
             #change aim location index if key is pressed
@@ -186,7 +190,9 @@ class Aimer:
                         mouse.release(Button.right)
                         pressed = False
                 print("%-50s" % status, end="\r")
-
+            if pressedL:
+                mouse.release(Button.left)
+                pressedL = False
             if self.closestSoldier is not None:
                 if cdll.user32.GetAsyncKeyState(self.trigger) & 0x8000:
                     if self.closestSoldierMovementX > self.screensize[0] / 2 or self.closestSoldierMovementY > \
@@ -199,10 +205,10 @@ class Aimer:
                             continue
                         if self.closestSoldierMovementX == 0 and self.closestSoldierMovementY == 0:
                             continue
-
                         self.move_mouse(int(self.closestSoldierMovementX), int(self.closestSoldierMovementY))
                         if self.autoshoot:
-                            mouse.click(Button.left, 5)
+                            mouse.press(Button.left)
+                            pressedL = True
                         time.sleep(0.001)
 
 
