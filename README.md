@@ -7,7 +7,7 @@
  - ##### Faster more snappy aiming 
  - ##### Batch included for easy usage  
 #### Install:
-1. ##### https://www.python.org/downloads/ and add to path
+1. ##### [Python](https://www.python.org/downloads/) and add to path
 2. ##### cmd.exe: pip install pynput
 #### Use with recommendation
  - ##### WeMod -> NoRecoil, BetterAccuracy
