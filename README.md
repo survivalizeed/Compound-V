@@ -14,5 +14,5 @@ This repo uses [xx4-bfv-aimassist](https://github.com/exex4/xx4-bfv-aimassist) a
 
 #### Use with recommendation
 
-##### WeMod -> NoRecoil, BetterAccuracy
-##### [Tormund's Radar](https://www.unknowncheats.me/forum/battlefield-v/332019-tormunds-radar-external-radar-bfv-pygame.html)
+ - ##### WeMod -> NoRecoil, BetterAccuracy
+ - ##### [Tormund's Radar](https://www.unknowncheats.me/forum/battlefield-v/332019-tormunds-radar-external-radar-bfv-pygame.html)
