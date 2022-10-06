@@ -4,8 +4,6 @@ import time
 import math
 from ctypes import *
 from pynput.mouse import Button, Controller
-from multiprocessing import Pool
-
 debug = 1
 
 
