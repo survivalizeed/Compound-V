@@ -3,6 +3,7 @@ from lib.bones import bones
 import time
 import math
 from ctypes import *
+from pynput.mouse import Button, Controller
 
 debug = 1
 
@@ -16,13 +17,15 @@ class Aimer:
     lastSoldier = 0
     screensize = (0, 0)
 
-    def __init__(self, screensize, trigger, distance_limit, fov, aim_locations, aim_switch):
+    def __init__(self, screensize, trigger, distance_limit, fov, aim_locations, aim_switch, autoshoot, autoscope):
         self.screensize = screensize
         self.trigger = trigger
         self.distance_limit = distance_limit
         self.fov = fov
         self.aim_locations = aim_locations
         self.aim_switch = aim_switch
+        self.autoshoot = autoshoot
+        self.autoscope = autoscope
 
     def DebugPrintMatrix(self, mat):
         print("[%.3f %.3f %.3f %.3f ]" % (mat[0][0], mat[0][1], mat[0][2], mat[0][3]))
@@ -73,6 +76,8 @@ class Aimer:
                     aim_location_names.append(key)
 
         # m = Mouse()
+        mouse = Controller()
+        pressed = False
         while 1:
 
             #change aim location index if key is pressed
@@ -165,7 +170,10 @@ class Aimer:
                         continue
                 status = "[%s] " % aim_location_names[aim_location_index]
                 if self.lastSoldier != 0:
-                    if self.lastSoldierObject.name != "":
+                    if self.autoscope:
+                        pressed = True
+                        mouse.press(Button.right)
+                    if self.lastSoldierObject.name != "": 
                         name = self.lastSoldierObject.name
                         if self.lastSoldierObject.clan != "":
                             name = "[%s]%s" % (self.lastSoldierObject.clan, name)
@@ -174,7 +182,11 @@ class Aimer:
                     status = status + "locked onto %s" % name
                 else:
                     status = status + "idle"
+                    if pressed and self.autoscope:
+                        mouse.release(Button.right)
+                        pressed = False
                 print("%-50s" % status, end="\r")
+
             if self.closestSoldier is not None:
                 if cdll.user32.GetAsyncKeyState(self.trigger) & 0x8000:
                     if self.closestSoldierMovementX > self.screensize[0] / 2 or self.closestSoldierMovementY > \
@@ -189,8 +201,9 @@ class Aimer:
                             continue
 
                         self.move_mouse(int(self.closestSoldierMovementX), int(self.closestSoldierMovementY))
-
-                        time.sleep(0.02)
+                        if self.autoshoot:
+                            mouse.click(Button.left, 5)
+                        time.sleep(0.001)
 
 
     def calcAim(self, data, Soldier):
@@ -238,11 +251,6 @@ class Aimer:
         y = float(mY - mY * y / w)
 
         return x, y, w
-
-    # def current_mouse_position(self):
-    #     cursor = POINT()
-    #     windll.user32.GetCursorPos(byref(cursor))
-    #     return cursor.x, cursor.y
 
     def move_mouse(self, x, y):  # relative
         ii = Input_I()
