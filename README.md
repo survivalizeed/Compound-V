@@ -14,3 +14,5 @@
 #### Use with recommendation
  - ##### WeMod -> NoRecoil, BetterAccuracy
  - ##### [Tormund's Radar](https://www.unknowncheats.me/forum/battlefield-v/332019-tormunds-radar-external-radar-bfv-pygame.html)
+#### RadarNameAddon
+##### If you use Tormund's Radar and want to do a real hunt then replace the Radar.py with the Radar.py from the RadarNameAddon. This will add names to the Radar.
