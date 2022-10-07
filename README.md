@@ -7,8 +7,9 @@
  - ##### Faster more snappy aiming 
  - ##### Batch included for easy usage  
 #### Install:
-1. ##### [Python](https://www.python.org/downloads/) and add to path
-2. ##### cmd.exe: pip install pynput
+1. ##### [BFV-AimBot](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/survivalizeed/BFV-AimBot)
+2. ##### [Python](https://www.python.org/downloads/) and add to path
+3. ##### cmd.exe: pip install pynput
 #### Use with recommendation
  - ##### WeMod -> NoRecoil, BetterAccuracy
  - ##### [Tormund's Radar](https://www.unknowncheats.me/forum/battlefield-v/332019-tormunds-radar-external-radar-bfv-pygame.html)
