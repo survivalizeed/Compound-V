@@ -6,10 +6,6 @@ from lib.bones import bones
 import time
 import ctypes
 
-print("Change or tweak options in the main.py file")
-print("You can change the aim target with the END key")
-print("Head -> Spine -> Neck -> Hips")
-print()
 #### CHANGE OPTIONS HERE ####
 
 # Field of View
@@ -31,6 +27,9 @@ autoshoot = True
 # If set to True your weapon will automatically scope as soon as you lock onto a target
 autoscope = True
 
+huntToggle = keycodes.NUMPAD5
+
+huntTargetSwitch = keycodes.NUMPAD8
 
 # Aim Location Options
 # Aim Location Switching (default is the first one listed)
@@ -48,18 +47,25 @@ screensize = ctypes.windll.user32.GetSystemMetrics(0), ctypes.windll.user32.GetS
 # or
 #screensize = (1280, 960)
 
+collection = [fov, distance_limit, trigger, autoshoot, autoscope, aim_locations, aim_switch, screensize, huntToggle, huntTargetSwitch]
+
 #### END OF CHANGE OPTIONS ####
 
 
-if fov < 0.1 or fov > 3.0:  # you can delete this if you know what you're doing
-    print("Check your fov setting.")
-    exit(1)
-if distance_limit is not None and distance_limit <= 0:
-    print("Check your distance_limit setting")
-    exit(1)
 
 if __name__ == "__main__":
+    if fov < 0.1 or fov > 3.0:  # you can delete this if you know what you're doing
+        print("Check your fov settings.")
+        exit(1)
+    if distance_limit is not None and distance_limit <= 0:
+        print("Check your distance_limit settings")
+        exit(1)
+
     print("BFV-AimBot ---> xx4 aim assist Version 0.5 as core and further developed by survivalizeed")
+    print("Change or tweak options in the main.py file")
+    print("Change the aim target with the END key")
+    print("Head -> Spine -> Neck -> Hips")
+    print()
     if not helpers.is_admin():
         print("- Error: This must be run with admin privileges")
         input("Press Enter to continue...")
@@ -77,5 +83,5 @@ if __name__ == "__main__":
         exit(1)
 
     print ("Using screensize: %s x %s" % screensize)
-    aimer = aimer.Aimer(screensize, trigger, distance_limit, fov, aim_locations, aim_switch, autoshoot, autoscope)
+    aimer = aimer.Aimer(collection)
     aimer.start()
