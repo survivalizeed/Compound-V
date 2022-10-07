@@ -1,9 +1,14 @@
+from gc import collect
+from turtle import screensize
 from lib import BFV
 from lib.bones import bones
 import time
 import math
 from ctypes import *
 from pynput.mouse import Button, Controller
+from multiprocessing import Pool
+from difflib import SequenceMatcher
+
 debug = 1
 
 
@@ -15,16 +20,29 @@ class Aimer:
     closestSoldierMovementY = 0
     lastSoldier = 0
     screensize = (0, 0)
+    
+    def __init__(self, collection):
+        self.collection = collection
+        self.fov = collection[0]
+        self.distance_limit = collection[1]
+        self.trigger = collection[2]
+        self.autoshoot = collection[3]
+        self.autoscope = collection[4]
+        self.aim_locations = collection[5]
+        self.aim_switch = collection[6]
+        self.screensize = collection[7]
+        self.huntToggle = collection[8]
+        self.huntTargetSwitch = collection[9]
 
-    def __init__(self, screensize, trigger, distance_limit, fov, aim_locations, aim_switch, autoshoot, autoscope):
-        self.screensize = screensize
-        self.trigger = trigger
-        self.distance_limit = distance_limit
-        self.fov = fov
-        self.aim_locations = aim_locations
-        self.aim_switch = aim_switch
-        self.autoshoot = autoshoot
-        self.autoscope = autoscope
+    def reload(self, collection):
+        self.fov = collection[0]
+        self.distance_limit = collection[1]
+        self.trigger = collection[2]
+        self.autoshoot = collection[3]
+        self.autoscope = collection[4]
+        self.aim_locations = collection[5]
+        self.aim_switch = collection[6]
+        self.screensize = collection[7]
 
     def DebugPrintMatrix(self, mat):
         print("[%.3f %.3f %.3f %.3f ]" % (mat[0][0], mat[0][1], mat[0][2], mat[0][3]))
@@ -78,8 +96,9 @@ class Aimer:
         mouse = Controller()
         pressed = False
         pressedL = False
-        pool = Pool(processes=1)  
-
+        huntMode = False
+        huntSoldier = None
+        huntSoldierName = None
         while 1:
 
             #change aim location index if key is pressed
@@ -104,10 +123,43 @@ class Aimer:
             self.closestSoldierMovementX = 0
             self.closestSoldierMovementY = 0
 
+            if cdll.user32.GetAsyncKeyState(self.huntToggle) & 0x8000:
+                if not data.soldiers:
+                    print("You are currently not in a round")
+                elif huntSoldier is None:
+                    print("No Soldier to hunt chosen")
+                else:
+                    huntMode = not huntMode
+                    if huntMode:
+                        self.distance_limit = None
+                    else:
+                        self.distance_limit = self.collection[1]
+                time.sleep(0.2)
+            
+            if cdll.user32.GetAsyncKeyState(self.huntTargetSwitch) & 0x8000:
+                if not data.soldiers:
+                    print("You are currently not in a round")
+                else:
+                    name = input("Enter a name to hunt:")
+                    ratios = []
+                    for soldier in data.soldiers:
+                        ratios += [SequenceMatcher(None, name, soldier.name).ratio()]
+                    huntSoldierName = data.soldiers[ratios.index(max(ratios))].name
+                    time.sleep(0.2)
+
+            for soldier in data.soldiers:
+                if huntSoldierName is None:
+                    break
+                if soldier.name == huntSoldierName:
+                    huntSoldier = soldier
+                    break
+
             if self.lastSoldier != 0:
-                if cdll.user32.GetAsyncKeyState(self.trigger) & 0x8000:
+                if cdll.user32.GetAsyncKeyState(self.trigger) & 0x8000 or huntMode:
                     found = False
                     for Soldier in data.soldiers:
+                        if huntMode and huntSoldier != Soldier: 
+                            continue
                         if self.lastSoldier == Soldier.ptr:
                             found = True
                             if Soldier.occluded:
@@ -145,6 +197,8 @@ class Aimer:
                     #print("Disengaging: key released")
             else:
                 for Soldier in data.soldiers:
+                    if huntMode and huntSoldier != Soldier: 
+                        continue
                     try:
                         dw, distance, delta_x, delta_y, Soldier.ptr, dfc = self.calcAim(data, Soldier)
 
@@ -157,7 +211,7 @@ class Aimer:
                             continue
 
                         if dfc < self.closestDistance:  # is actually comparing dfc, not distance
-                            if cdll.user32.GetAsyncKeyState(self.trigger) & 0x8000:
+                            if cdll.user32.GetAsyncKeyState(self.trigger) & 0x8000 or huntMode:
                                 self.closestDistance = dfc
                                 self.closestSoldier = Soldier
                                 self.closestSoldierMovementX = delta_x
@@ -187,12 +241,15 @@ class Aimer:
                     if pressed and self.autoscope:
                         mouse.release(Button.right)
                         pressed = False
-                print("%-50s" % status, end="\r")
+                if not huntMode:
+                    print("%-50s" % status, end="\r")
+                if huntMode:
+                    print("Current Hunt: ", "[%s]%s" % (huntSoldier.clan, huntSoldier.name), end="\r")
             if pressedL:
                 mouse.release(Button.left)
                 pressedL = False
             if self.closestSoldier is not None:
-                if cdll.user32.GetAsyncKeyState(self.trigger) & 0x8000:
+                if cdll.user32.GetAsyncKeyState(self.trigger) & 0x8000 or huntMode:
                     if self.closestSoldierMovementX > self.screensize[0] / 2 or self.closestSoldierMovementY > \
                             self.screensize[1] / 2:
                         continue
