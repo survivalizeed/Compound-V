@@ -3,6 +3,7 @@
 #### It contains the following adjustments:  
  - ##### Auto-Shoot option
  - ##### Auto-Scope option
+ - ##### Hunt-Mode: Allows you to only aimbot one person. Distance limit will be set to None and you don't have to press the Trigger-Button  
  - ##### More keycodes (Mouse Extra Keys)
  - ##### Faster more snappy aiming 
  - ##### Batch included for easy usage  
