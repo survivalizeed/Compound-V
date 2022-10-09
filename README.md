@@ -3,7 +3,8 @@
 #### It contains the following adjustments:  
  - ##### Auto-Shoot option
  - ##### Auto-Scope option
- - ##### Hunt-Mode: Allows you to only aimbot one person. Distance limit will be set to None and you don't have to press the Trigger-Button  
+ - ##### Dodge-Mode: While aiming somebody with the aimbot you continuously crouch and uncrouch. It makes you way harder to shoot.
+ - ##### Hunt-Mode: Allows you to only aimbot one person. Distance limit will be set to None and you don't have to press the Trigger-Button. You will also see the distance to your current hunt. 
  - ##### More keycodes (Mouse Extra Keys)
  - ##### Faster more snappy aiming 
  - ##### Batch included for easy usage  
