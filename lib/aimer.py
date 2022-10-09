@@ -6,8 +6,10 @@ import time
 import math
 from ctypes import *
 from pynput.mouse import Button, Controller
-from multiprocessing import Pool
 from difflib import SequenceMatcher
+import pyautogui
+import pydirectinput
+from threading import Thread
 
 debug = 1
 
@@ -20,7 +22,8 @@ class Aimer:
     closestSoldierMovementY = 0
     lastSoldier = 0
     screensize = (0, 0)
-    
+    dodge = False
+
     def __init__(self, collection):
         self.collection = collection
         self.fov = collection[0]
@@ -33,16 +36,10 @@ class Aimer:
         self.screensize = collection[7]
         self.huntToggle = collection[8]
         self.huntTargetSwitch = collection[9]
-
-    def reload(self, collection):
-        self.fov = collection[0]
-        self.distance_limit = collection[1]
-        self.trigger = collection[2]
-        self.autoshoot = collection[3]
-        self.autoscope = collection[4]
-        self.aim_locations = collection[5]
-        self.aim_switch = collection[6]
-        self.screensize = collection[7]
+        self.dodgeMode = collection[10]
+        self.crouch_Key = collection[11]
+        self.toggle_autoshoot = collection[12]
+        self.toggle_dodge_Mode = collection[13]
 
     def DebugPrintMatrix(self, mat):
         print("[%.3f %.3f %.3f %.3f ]" % (mat[0][0], mat[0][1], mat[0][2], mat[0][3]))
@@ -66,6 +63,12 @@ class Aimer:
         return rightMin + (valueScaled * rightSpan)
 
         # return 0.0 + (distance - 0) / 20 * 100
+
+    def dodgeIt(self):
+        while True:
+            if self.dodge:
+                pydirectinput.press(self.crouch_Key)
+            time.sleep(0.01)    
 
     def start(self):
         print("[+] Searching for BFV.exe")
@@ -94,13 +97,17 @@ class Aimer:
 
         # m = Mouse()
         mouse = Controller()
+        pressedCounter = 0
         pressed = False
         pressedL = False
         huntMode = False
         huntSoldier = None
         huntSoldierName = None
-        while 1:
 
+        dodge = Thread(target=self.dodgeIt)
+        dodge.start()
+
+        while 1:
             #change aim location index if key is pressed
             if self.aim_switch:
                 if cdll.user32.GetAsyncKeyState(self.aim_switch) & 0x8000:
@@ -134,18 +141,19 @@ class Aimer:
                         self.distance_limit = None
                     else:
                         self.distance_limit = self.collection[1]
-                time.sleep(0.2)
+                time.sleep(0.3)
             
             if cdll.user32.GetAsyncKeyState(self.huntTargetSwitch) & 0x8000:
                 if not data.soldiers:
                     print("You are currently not in a round")
                 else:
+                    print()
                     name = input("Enter a name to hunt:")
                     ratios = []
                     for soldier in data.soldiers:
                         ratios += [SequenceMatcher(None, name, soldier.name).ratio()]
                     huntSoldierName = data.soldiers[ratios.index(max(ratios))].name
-                    time.sleep(0.2)
+                time.sleep(0.3)
 
             for soldier in data.soldiers:
                 if huntSoldierName is None:
@@ -153,6 +161,14 @@ class Aimer:
                 if soldier.name == huntSoldierName:
                     huntSoldier = soldier
                     break
+
+            if cdll.user32.GetAsyncKeyState(self.toggle_autoshoot) & 0x8000:
+                self.autoshoot = not self.autoshoot
+                time.sleep(0.3)
+                
+            if cdll.user32.GetAsyncKeyState(self.toggle_dodge_Mode) & 0x8000:
+                self.dodgeMode = not self.dodgeMode
+                time.sleep(0.3)
 
             if self.lastSoldier != 0:
                 if cdll.user32.GetAsyncKeyState(self.trigger) & 0x8000 or huntMode:
@@ -228,7 +244,9 @@ class Aimer:
                 if self.lastSoldier != 0:
                     if self.autoscope:
                         pressed = True
+                        pressedCounter = 0
                         mouse.press(Button.right)
+                        
                     if self.lastSoldierObject.name != "": 
                         name = self.lastSoldierObject.name
                         if self.lastSoldierObject.clan != "":
@@ -238,15 +256,21 @@ class Aimer:
                     status = status + "locked onto %s" % name
                 else:
                     status = status + "idle"
-                    if pressed and self.autoscope:
+                    pressedCounter += 1
+                    if pressed and self.autoscope and pressedCounter >= 50:
                         mouse.release(Button.right)
+                        pressedCounter = 0
                         pressed = False
                 if not huntMode:
                     print("%-50s" % status, end="\r")
                 if huntMode:
-                    print("Current Hunt: ", "[%s]%s" % (huntSoldier.clan, huntSoldier.name), end="\r")
+                    print("Current Hunt: ", "[%s]%s" % (huntSoldier.clan, huntSoldier.name), "Distance: ", round(self.FindDistance(huntSoldier.transform[3][0], huntSoldier.transform[3][1], huntSoldier.transform[3][2],
+                                     data.mytransform[3][0], data.mytransform[3][1], data.mytransform[3][2]), 1), end="\r")
             if pressedL:
-                mouse.release(Button.left)
+                if self.autoshoot:
+                    mouse.release(Button.left)  
+                if self.dodgeMode:
+                    self.dodge = False
                 pressedL = False
             if self.closestSoldier is not None:
                 if cdll.user32.GetAsyncKeyState(self.trigger) & 0x8000 or huntMode:
@@ -261,10 +285,12 @@ class Aimer:
                         if self.closestSoldierMovementX == 0 and self.closestSoldierMovementY == 0:
                             continue
                         self.move_mouse(int(self.closestSoldierMovementX), int(self.closestSoldierMovementY))
+                        if self.dodgeMode:
+                            self.dodge = True
                         if self.autoshoot:
                             mouse.press(Button.left)
-                            pressedL = True
-                        time.sleep(0.001)
+                        pressedL = True
+                    time.sleep(0.001)
 
 
     def calcAim(self, data, Soldier):
