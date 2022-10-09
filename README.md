@@ -9,7 +9,7 @@
  - ##### Faster more snappy aiming 
  - ##### Batch included for easy usage  
 #### Install:
-1. ##### [BFV-AimBot](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/survivalizeed/BFV-AimBot)
+1. ##### [Compound-V](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/survivalizeed/Compound-V)
 2. ##### [Python](https://www.python.org/downloads/) and add to path
 3. ##### cmd.exe: pip install pynput
 #### Use with recommendation
