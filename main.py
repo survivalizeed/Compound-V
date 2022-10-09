@@ -11,25 +11,38 @@ import ctypes
 # Field of View
 # Alter this between 0.1 and 3.0 for best results. 0.1 is very narrow, while larger numbers allow
 # for more soldiers to be targeted
-fov = 2.0
+fov = 2.5
 
 # Distance Limit
-# Example, set to 75 to limit locking onto soldiers further than 100 meters away.
-distance_limit = 75 # can also be: None
+# Example, set to 100 to limit locking onto soldiers further than 100 meters away.
+distance_limit = 100 # can also be: None
 
 # Trigger Button
 # Grab your preferred button from lib/keycodes.py
 trigger = keycodes.XBUTTON2
 
+# If set to True you will automatically crouch and uncrouch while shooting others. According to my experience this will make you be less shot by others.
+dodge_Mode = True
+
+# Your key to crouch. Use a string here instead of a keycode.
+crouch_Key = "ctrl"
+
+toggle_dodge_Mode = keycodes.NUMPAD2
+
 # If set to True your weapon will automatically shoot after finding a target
 autoshoot = True
+
+# Toggle autoshoot. Use this if you are using a sniper or a small magazine.
+toggle_autoshoot = keycodes.NUMPAD1
 
 # If set to True your weapon will automatically scope as soon as you lock onto a target
 autoscope = True
 
-huntToggle = keycodes.NUMPAD5
+# Press this button to switch between normal aimbot and hunt
+hunt_Toggle = keycodes.NUMPAD5
 
-huntTargetSwitch = keycodes.NUMPAD8
+# Press this and you have to input a name into the console to hunt. You don't need to write the exact name the program will try to find the name with the most matches.
+hunt_Target_Switch = keycodes.NUMPAD8
 
 # Aim Location Options
 # Aim Location Switching (default is the first one listed)
@@ -47,7 +60,7 @@ screensize = ctypes.windll.user32.GetSystemMetrics(0), ctypes.windll.user32.GetS
 # or
 #screensize = (1280, 960)
 
-collection = [fov, distance_limit, trigger, autoshoot, autoscope, aim_locations, aim_switch, screensize, huntToggle, huntTargetSwitch]
+collection = [fov, distance_limit, trigger, autoshoot, autoscope, aim_locations, aim_switch, screensize, hunt_Toggle, hunt_Target_Switch, dodge_Mode, crouch_Key, toggle_autoshoot, toggle_dodge_Mode]
 
 #### END OF CHANGE OPTIONS ####
 
@@ -61,10 +74,7 @@ if __name__ == "__main__":
         print("Check your distance_limit settings")
         exit(1)
 
-    print("BFV-AimBot ---> xx4 aim assist Version 0.5 as core and further developed by survivalizeed")
-    print("Change or tweak options in the main.py file")
-    print("Change the aim target with the END key")
-    print("Head -> Spine -> Neck -> Hips")
+    print("Compound-V by survivalizeed")
     print()
     if not helpers.is_admin():
         print("- Error: This must be run with admin privileges")
