@@ -13,7 +13,7 @@
 2. ##### [Python](https://www.python.org/downloads/) and add to path
 3. ##### cmd.exe: pip install pynput
 #### Use with recommendation
- - ##### WeMod -> NoRecoil, BetterAccuracy   (Sometimes results in hits without dealing damage)
+ - ##### [WeMod](https://www.wemod.com/de) -> NoRecoil, BetterAccuracy   (Sometimes results in hits without dealing damage)
  - ##### [Tormund's Radar](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/70RMUND/Tormund-BFV-Radar)
 #### RadarNameAddon
 ##### If you use Tormund's Radar and want to do a real hunt then replace the Radar.py with the Radar.py from the RadarNameAddon. This will add names to the Radar.
