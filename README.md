@@ -1,4 +1,4 @@
-# BFV-AimBot
+# Compound-V
 #### This repo uses [xx4-bfv-aimassist](https://github.com/exex4/xx4-bfv-aimassist) as its core!  
 #### It contains the following adjustments:  
  - ##### Auto-Shoot option
