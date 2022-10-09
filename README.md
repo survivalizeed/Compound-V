@@ -12,6 +12,8 @@
 1. ##### [Compound-V](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/survivalizeed/Compound-V)
 2. ##### [Python](https://www.python.org/downloads/) and add to path
 3. ##### cmd.exe: pip install pynput
+4. ##### cmd.exe: pip install pyautogui
+5. ##### cmd.exe: pip install pydirectinput
 #### Use with recommendation
  - ##### [WeMod](https://www.wemod.com/de) -> NoRecoil, BetterAccuracy   (Sometimes results in hits without dealing damage)
  - ##### [Tormund's Radar](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/70RMUND/Tormund-BFV-Radar)
