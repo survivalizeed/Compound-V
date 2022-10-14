@@ -10,6 +10,8 @@ from difflib import SequenceMatcher
 import pyautogui
 import pydirectinput
 from threading import Thread
+from playsound import playsound
+import os
 
 debug = 1
 
@@ -22,7 +24,7 @@ class Aimer:
     closestSoldierMovementY = 0
     lastSoldier = 0
     screensize = (0, 0)
-    dodge = False
+    dodge = False 
 
     def __init__(self, collection):
         self.collection = collection
@@ -40,6 +42,7 @@ class Aimer:
         self.crouch_Key = collection[11]
         self.toggle_autoshoot = collection[12]
         self.toggle_dodge_Mode = collection[13]
+        self.toggle_keep_target = collection[14]
 
     def DebugPrintMatrix(self, mat):
         print("[%.3f %.3f %.3f %.3f ]" % (mat[0][0], mat[0][1], mat[0][2], mat[0][3]))
@@ -68,7 +71,8 @@ class Aimer:
         while True:
             if self.dodge:
                 pydirectinput.press(self.crouch_Key)
-            time.sleep(0.01)    
+            time.sleep(0.01)      
+
 
     def start(self):
         print("[+] Searching for BFV.exe")
@@ -96,13 +100,14 @@ class Aimer:
                     aim_location_names.append(key)
 
         # m = Mouse()
-        mouse = Controller()
         pressedCounter = 0
         pressed = False
         pressedL = False
         huntMode = False
+        keepTarget = False
         huntSoldier = None
         huntSoldierName = None
+        mouse = Controller()
 
         dodge = Thread(target=self.dodgeIt)
         dodge.start()
@@ -130,6 +135,14 @@ class Aimer:
             self.closestSoldierMovementX = 0
             self.closestSoldierMovementY = 0
 
+            if cdll.user32.GetAsyncKeyState(self.toggle_keep_target) & 0x8000:
+                keepTarget = not keepTarget
+                if keepTarget:
+                    Thread(target=playsound, args=(os.getcwd() + '/snd/activate.mp3',), daemon=True).start()
+                else:
+                    Thread(target=playsound, args=(os.getcwd() + './snd/deactivate.mp3',), daemon=True).start()
+                time.sleep(0.3)
+
             if cdll.user32.GetAsyncKeyState(self.huntToggle) & 0x8000:
                 if not data.soldiers:
                     print("You are currently not in a round")
@@ -139,8 +152,10 @@ class Aimer:
                     huntMode = not huntMode
                     if huntMode:
                         self.distance_limit = None
+                        Thread(target=playsound, args=(os.getcwd() + '/snd/activate.mp3',), daemon=True).start()
                     else:
                         self.distance_limit = self.collection[1]
+                        Thread(target=playsound, args=(os.getcwd() + './snd/deactivate.mp3',), daemon=True).start()
                 time.sleep(0.3)
             
             if cdll.user32.GetAsyncKeyState(self.huntTargetSwitch) & 0x8000:
@@ -164,10 +179,18 @@ class Aimer:
 
             if cdll.user32.GetAsyncKeyState(self.toggle_autoshoot) & 0x8000:
                 self.autoshoot = not self.autoshoot
+                if self.autoshoot:
+                    Thread(target=playsound, args=(os.getcwd() + '/snd/activate.mp3',), daemon=True).start()
+                else:
+                    Thread(target=playsound, args=(os.getcwd() + '/snd/deactivate.mp3',), daemon=True).start()
                 time.sleep(0.3)
                 
             if cdll.user32.GetAsyncKeyState(self.toggle_dodge_Mode) & 0x8000:
                 self.dodgeMode = not self.dodgeMode
+                if self.dodgeMode:
+                    Thread(target=playsound, args=(os.getcwd() + '/snd/activate.mp3',), daemon=True).start()
+                else:
+                    Thread(target=playsound, args=(os.getcwd() + '/snd/deactivate.mp3',), daemon=True).start()
                 time.sleep(0.3)
 
             if self.lastSoldier != 0:
@@ -179,11 +202,14 @@ class Aimer:
                         if self.lastSoldier == Soldier.ptr:
                             found = True
                             if Soldier.occluded:
-                                self.lastSoldier = 0
-                                self.closestSoldier = None
-                                self.lastX = 0
-                                self.lastY = 0
-                                continue
+                                if keepTarget:
+                                    mouse.release(Button.left)
+                                else:
+                                    self.lastSoldier = 0
+                                    self.closestSoldier = None
+                                    self.lastX = 0
+                                    self.lastY = 0
+                                    continue
                             try:
                                 dw, distance, delta_x, delta_y, Soldier.ptr, dfc = self.calcAim(data, Soldier)
                                 self.closestDistance = dfc
@@ -194,6 +220,7 @@ class Aimer:
                                 self.closestSoldierMovementY = delta_y# + (self.lastY * accel)
                                 self.lastX = delta_x
                                 self.lastY = delta_y
+                                continue
                                 # print("x: %s" % delta_x)
                             except Exception as e:
                                 self.lastSoldier = 0
@@ -212,31 +239,34 @@ class Aimer:
                     self.lastY = 0
                     #print("Disengaging: key released")
             else:
+                distanceList = []
                 for Soldier in data.soldiers:
                     if huntMode and huntSoldier != Soldier: 
                         continue
                     try:
                         dw, distance, delta_x, delta_y, Soldier.ptr, dfc = self.calcAim(data, Soldier)
-
                         if dw > self.fov:
                             continue
+                        
                         if Soldier.occluded:
                             continue
 
                         if self.distance_limit is not None and distance > self.distance_limit:
                             continue
 
-                        if dfc < self.closestDistance:  # is actually comparing dfc, not distance
-                            if cdll.user32.GetAsyncKeyState(self.trigger) & 0x8000 or huntMode:
-                                self.closestDistance = dfc
-                                self.closestSoldier = Soldier
-                                self.closestSoldierMovementX = delta_x
-                                self.closestSoldierMovementY = delta_y
-                                self.lastSoldier = Soldier.ptr
-                                self.lastSoldierObject = Soldier
-                                self.lastX = delta_x
-                                self.lastY = delta_y
-
+                        distanceList += [distance]
+                        if distance <= min(distanceList):
+                            if dfc < self.closestDistance:  # is actually comparing dfc, not distance
+                                if cdll.user32.GetAsyncKeyState(self.trigger) & 0x8000 or huntMode:
+                                    self.closestDistance = dfc
+                                    self.closestSoldier = Soldier
+                                    self.closestSoldierMovementX = delta_x
+                                    self.closestSoldierMovementY = delta_y
+                                    self.lastSoldier = Soldier.ptr
+                                    self.lastSoldierObject = Soldier
+                                    self.lastX = delta_x
+                                    self.lastY = delta_y
+                                    self.distance = distance
                     except:
                         # print("Exception", sys.exc_info()[0])
                         continue
@@ -263,12 +293,12 @@ class Aimer:
                         pressed = False
                 if not huntMode:
                     print("%-50s" % status, end="\r")
-                if huntMode:
+                if huntMode and huntSoldierName is not None:
                     print("Current Hunt: ", "[%s]%s" % (huntSoldier.clan, huntSoldier.name), "Distance: ", round(self.FindDistance(huntSoldier.transform[3][0], huntSoldier.transform[3][1], huntSoldier.transform[3][2],
                                      data.mytransform[3][0], data.mytransform[3][1], data.mytransform[3][2]), 1), end="\r")
             if pressedL:
                 if self.autoshoot:
-                    mouse.release(Button.left)  
+                    mouse.release(Button.left)
                 if self.dodgeMode:
                     self.dodge = False
                 pressedL = False
@@ -284,13 +314,13 @@ class Aimer:
                             continue
                         if self.closestSoldierMovementX == 0 and self.closestSoldierMovementY == 0:
                             continue
-                        self.move_mouse(int(self.closestSoldierMovementX), int(self.closestSoldierMovementY))
+                        self.move_mouse(int(self.closestSoldierMovementX), int(self.closestSoldierMovementY - int(self.distance * 0.03)))
                         if self.dodgeMode:
                             self.dodge = True
                         if self.autoshoot:
-                            mouse.press(Button.left)
+                            if not self.closestSoldier.occluded:  
+                                mouse.press(Button.left)
                         pressedL = True
-                    time.sleep(0.001)
 
 
     def calcAim(self, data, Soldier):

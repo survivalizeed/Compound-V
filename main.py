@@ -22,12 +22,14 @@ distance_limit = 100 # can also be: None
 trigger = keycodes.XBUTTON2
 
 # If set to True you will automatically crouch and uncrouch while shooting others. According to my experience this will make you be less shot by others.
-dodge_Mode = True
+dodge_Mode = False
 
 # Your key to crouch. Use a string here instead of a keycode.
 crouch_Key = "ctrl"
 
 toggle_dodge_Mode = keycodes.NUMPAD2
+
+toggle_keep_target = keycodes.NUMPAD3
 
 # If set to True your weapon will automatically shoot after finding a target
 autoshoot = True
@@ -60,7 +62,7 @@ screensize = ctypes.windll.user32.GetSystemMetrics(0), ctypes.windll.user32.GetS
 # or
 #screensize = (1280, 960)
 
-collection = [fov, distance_limit, trigger, autoshoot, autoscope, aim_locations, aim_switch, screensize, hunt_Toggle, hunt_Target_Switch, dodge_Mode, crouch_Key, toggle_autoshoot, toggle_dodge_Mode]
+collection = [fov, distance_limit, trigger, autoshoot, autoscope, aim_locations, aim_switch, screensize, hunt_Toggle, hunt_Target_Switch, dodge_Mode, crouch_Key, toggle_autoshoot, toggle_dodge_Mode, toggle_keep_target]
 
 #### END OF CHANGE OPTIONS ####
 
