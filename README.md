@@ -3,7 +3,7 @@
 #### It contains the following adjustments:  
  - ##### Auto-Shoot option
  - ##### Auto-Scope option
- - ##### Dodge-Mode: While aiming somebody with the aimbot you continuously crouch and uncrouch. It makes you way harder to shoot.
+ - ##### Dodge-Mode: While aiming somebody with the aimbot you continuously crouch and uncrouch. It makes you way harder to get shot.
  - ##### Hunt-Mode: Allows you to only aimbot one person. Distance limit will be set to None and you don't have to press the Trigger-Button. You will also see the distance to your current hunt. 
  - ##### Focus-Mode: Won't switch target even if the target is behind an obstacle. Good against peak snipers
  - ##### Anti-Bulletdrop: Measures the distance to the current target and offsets the pitch rotation by a well fitting factor
