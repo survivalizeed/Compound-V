@@ -1,5 +1,6 @@
 # Compound-V
 ### This is a FORK, that implements a new UI! This does **NOT** change any of the core functionality!
+### Furthermore, the UI is not fully complete! If anyone wants to help fix this mess, please PR!
 - - - -
 #### This repo uses [xx4-bfv-aimassist](https://github.com/exex4/xx4-bfv-aimassist) as its core!
 - - - -
