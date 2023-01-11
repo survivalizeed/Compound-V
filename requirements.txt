@@ -1,0 +1,5 @@
+playsound==1.2.2
+PyDirectInput==1.0.4
+pygame==2.1.2
+pynput==1.7.6
+rich==13.0.1
