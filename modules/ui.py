@@ -10,7 +10,7 @@ from rich import box
 console = Console()
 layout = Layout()
 
-def layout_ui(autoshoot, autoscope, autododge, keeptarget, fov, distance) -> layout:
+def layout_ui(autoshoot, autoscope, autododge, keeptarget, fov, distance, bone) -> layout:
     if autoshoot == True:
         styleShoot = "green"
     elif autoshoot == False:
@@ -40,7 +40,8 @@ def layout_ui(autoshoot, autoscope, autododge, keeptarget, fov, distance) -> lay
     tableToggles.add_row("KeepTarget", f"{keeptarget}", style=f"{styleKeepTarget}"),
     tableToggles.add_row()
     tableToggles.add_row("FOV", f"{fov}", style="grey50")
-    tableToggles.add_row("Distance", f"{distance}", end_section=True, style="grey50")
+    tableToggles.add_row("Distance", f"{distance}", style="grey50")
+    tableToggles.add_row("Bone", f"{bone}", end_section=True, style="grey50")
 
     bannerText = """\
       _____                                  __   _   __
