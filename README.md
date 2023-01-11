@@ -26,10 +26,10 @@
 #### How to use:
 1. Load BFV first
 2. Once the menu has loaded, open the included `.bat` file and let the program load
-3. Alternatively, you can use terminal to navigate to this projects folder, and run `python main.py`
-4. Enter a Game.
-5. Click your keybinds to verify that everything is loaded (You will hear a sound play)
-6. Enjoy!
+   1. Alternatively, or if the `.bat` crashes, you can use terminal to navigate to this projects folder, and run `python main.py`
+5. Enter a Game.
+6. Click your keybinds to verify that everything is loaded (You will hear a sound play)
+7. Enjoy!
 
 #### Use with recommendation
  - ##### [Tormund's Radar](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/70RMUND/Tormund-BFV-Radar)
