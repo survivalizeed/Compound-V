@@ -117,19 +117,20 @@ class Aimer:
     
         # Create our Rich Live Output, and pass our Layout UI function to it
         with Live(
-            layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit),
+            layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit, aim_location_names[aim_location_index]),
             screen=True,
             console=console,
             redirect_stdout=True) as live:
             
             # Print our Layout UI
-            console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit)) 
+            console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit, aim_location_names[aim_location_index])) 
 
             while 1:
                 #change aim location index if key is pressed
                 if self.aim_switch:
                     if cdll.user32.GetAsyncKeyState(self.aim_switch) & 0x8000:
                         aim_switch_pressed = True
+                        console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit, aim_location_names[aim_location_index])) 
                     elif aim_switch_pressed:
                         aim_switch_pressed = False
                         aim_location_index = aim_location_index + 1
@@ -155,11 +156,11 @@ class Aimer:
                         Thread(target=playsound, args=(os.getcwd() + '/snd/activate.mp3',), daemon=True).start()
                         # print("[+] Keep Target Activated")
                         keepTarget = True
-                        console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit))               
+                        console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit, aim_location_names[aim_location_index]))               
                     else:
                         Thread(target=playsound, args=(os.getcwd() + './snd/deactivate.mp3',), daemon=True).start()
                         keepTarget = False
-                        console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit))
+                        console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit, aim_location_names[aim_location_index]))
                     time.sleep(0.3)
 
                 if cdll.user32.GetAsyncKeyState(self.huntToggle) & 0x8000:
@@ -204,11 +205,11 @@ class Aimer:
                     if self.autoshoot:
                         Thread(target=playsound, args=(os.getcwd() + '/snd/activate.mp3',), daemon=True).start()
                         self.autoshoot = True
-                        console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit))
+                        console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit, aim_location_names[aim_location_index]))
                     else:
                         Thread(target=playsound, args=(os.getcwd() + '/snd/deactivate.mp3',), daemon=True).start()
                         self.autoshoot = False
-                        console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit))
+                        console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit, aim_location_names[aim_location_index]))
                     time.sleep(0.3)
                     
                 if cdll.user32.GetAsyncKeyState(self.toggle_dodge_Mode) & 0x8000:
@@ -217,11 +218,11 @@ class Aimer:
                         Thread(target=playsound, args=(os.getcwd() + '/snd/activate.mp3',), daemon=True).start()
                         # print("[+] Dodge Activated")
                         self.dodgeMode = True
-                        console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit))
+                        console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit, aim_location_names[aim_location_index]))
                     else:
                         Thread(target=playsound, args=(os.getcwd() + '/snd/deactivate.mp3',), daemon=True).start()
                         self.dodgeMode = False
-                        console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit))
+                        console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit, aim_location_names[aim_location_index]))
                     time.sleep(0.3)
 
                 if self.lastSoldier != 0:
