@@ -1,5 +1,8 @@
 # Compound-V
-#### This repo uses [xx4-bfv-aimassist](https://github.com/exex4/xx4-bfv-aimassist) as its core!  
+### This is a FORK, that implements a new UI! This does **NOT** change any of the core functionality!
+- - - -
+#### This repo uses [xx4-bfv-aimassist](https://github.com/exex4/xx4-bfv-aimassist) as its core!
+- - - -
 #### It contains the following adjustments:  
  - ##### Auto-Shoot option
  - ##### Auto-Scope option
@@ -11,14 +14,25 @@
  - ##### Faster more snappy aiming 
  - ##### Batch included for easy usage  
 #### Install:
-1. ##### [Compound-V](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/survivalizeed/Compound-V)
-2. ##### [Python](https://www.python.org/downloads/) and add to path
-3. ##### cmd.exe: pip install pynput
-4. ##### cmd.exe: pip install pyautogui
-5. ##### cmd.exe: pip install pydirectinput
-6. ##### cmd.exe: pip install playsound
+
+#### Installation:
+1. Clone this repo, or download it from [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/notrespire/Compound-V)
+2. Download and Install [Python](https://www.python.org/downloads/).
+   1. Grab the latest version, and make sure it's added to your PATH.
+3. Open your Terminal, navigate to this folder, and run the following command:
+   1. `pip install -r requirements.txt`
+4. Edit the Config in `main.py`
+   
+#### How to use:
+1. Load BFV first
+2. Once the menu has loaded, open the included `.bat` file and let the program load
+3. Alternatively, you can use terminal to navigate to this projects folder, and run `python main.py`
+4. Enter a Game.
+5. Click your keybinds to verify that everything is loaded (You will hear a sound play)
+6. Enjoy!
+
 #### Use with recommendation
- - ##### [WeMod](https://www.wemod.com/de) -> BetterAccuracy
  - ##### [Tormund's Radar](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/70RMUND/Tormund-BFV-Radar)
+  
 #### RadarNameAddon
 ##### If you use Tormund's Radar and want to do a real hunt then replace the Radar.py with the Radar.py from the RadarNameAddon. This will add names to the Radar.
