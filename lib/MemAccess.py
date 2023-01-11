@@ -368,7 +368,7 @@ class WinApi():
     def VirtualQueryEx64(self, handle, lpAddress):
         mbi = MEMORY_BASIC_INFORMATION64()
         if not windll.kernel32.VirtualQueryEx(handle, LPCVOID(lpAddress), byref(mbi), sizeof(mbi)):
-            raise ProcessException('Error VirtualQueryEx: 0x%08X' % lpAddress)
+            raise Exception('Error VirtualQueryEx: 0x%08X' % lpAddress)
         return mbi
 
     def iter_region(self, handle, start_offset=None, end_offset=None, protec=None, optimizations=None):
