@@ -109,8 +109,8 @@ class Aimer:
                 if bones[key] == location:
                     aim_location_names.append(key)
                     
-        # Set Aim Bone to current aim location            
-        aim_bone = aim_location_names[aim_location_index]
+        # Set Aim Bone to current aim location
+        aim_bone = self.aim_locations[aim_location_index]
         
         # logging.debug(f"Aim Location Names:{aim_location_names}")
         # logging.debug(f"Aim Bone Set:{aim_bone}")
@@ -153,7 +153,7 @@ class Aimer:
                             aim_location_index = aim_location_index + 1
                             if aim_location_index > aim_location_max:
                                 aim_location_index = 0
-                            aim_bone = aim_location_names[aim_location_index]
+                            aim_bone = self.aim_locations[aim_location_index]
                             
                             # Print our Layout UI
                             if self.random_aim_location:
@@ -180,7 +180,7 @@ class Aimer:
                 if cdll.user32.GetAsyncKeyState(self.toggle_keep_target) & 0x8000:
                     keepTarget = not keepTarget
                     if keepTarget:
-                        Thread(target=playsound, args=(os.getcwd() + '/snd/activate.mp3',), daemon=True).start()
+                        Thread(target=playsound, args=(os.getcwd() + '/snd/activate.mp3'), daemon=True).start()
                         keepTarget = True
                         
                         # Print our Layout UI
@@ -189,7 +189,7 @@ class Aimer:
                         else:
                             console.print(layout_ui(self.autoshoot, self.autoscope, self.dodgeMode, keepTarget, self.fov, self.distance_limit, huntMode, huntSoldierName, aim_location_names[aim_location_index]))      
                     else:
-                        Thread(target=playsound, args=(os.getcwd() + './snd/deactivate.mp3',), daemon=True).start()
+                        Thread(target=playsound, args=(os.getcwd() + './snd/deactivate.mp3'), daemon=True).start()
                         keepTarget = False
                         # Print our Layout UI
                         if self.random_aim_location:
