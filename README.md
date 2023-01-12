@@ -1,6 +1,6 @@
 # Compound-V
 ### Disclaimer:
-| This is a FORK of [Compound-V](https://github.com/survivalizeed/Compound-V), that implements a new [UI](https://prnt.sc/Vej3_wHfuxGv), and a Random Aim/Bone selector.
+| This is a FORK of [Compound-V](https://github.com/survivalizeed/Compound-V), that implements a new [UI](https://prnt.sc/dy47vDOjuKUz), and a Random Aim/Bone selector.
 
 | This **DOES NOT** change the core functionality of this project, which comes from [xx4-bfv-aimassist](https://github.com/exex4/xx4-bfv-aimassist)
 
@@ -11,7 +11,7 @@
 ## Overview:
 This project is a BFV aim-assist that implements the following features:
 - A new UI that shows you your toggle status
-  - Check out a screenshot [here](https://prnt.sc/Vej3_wHfuxGv)
+  - Check out a screenshot [here](https://prnt.sc/dy47vDOjuKUz)
 - Customizable Config/Keybinds
   - More Keycodes/Extra Keys
 - Faster, Snappier Aiming/Targeting Switching
