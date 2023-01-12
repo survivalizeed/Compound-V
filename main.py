@@ -14,7 +14,7 @@ console = Console()
 # Field of View
 # Alter this between 0.1 and 3.0 for best results. 0.1 is very narrow, while larger numbers allow
 # for more soldiers to be targeted
-fov = 1.75
+fov = 1.0
 
 # Distance Limit
 # Example, set to 100 to limit locking onto soldiers further than 100 meters away.
@@ -32,7 +32,7 @@ dodge_Mode = False
 crouch_Key = "ctrl"
 
 # Keybind to enable or disable Dodge Mode
-toggle_dodge_Mode = keycodes.PAGEUP
+toggle_dodge_Mode = keycodes.PAGEDOWN
 
 # Keep Target will continue to aim at your target, even if they are occluded.
 toggle_keep_target = keycodes.NUMPAD7
