@@ -16,7 +16,8 @@
 3. ##### cmd.exe: pip install pynput
 4. ##### cmd.exe: pip install pyautogui
 5. ##### cmd.exe: pip install pydirectinput
-6. ##### cmd.exe: pip install playsound
+6. ##### cmd.exe: pip install playsound==1.2.2
+7. ##### cmd.exe: pip install numpy
 #### Use with recommendation
  - ##### [WeMod](https://www.wemod.com/de) -> BetterAccuracy
  - ##### [Tormund's Radar](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/70RMUND/Tormund-BFV-Radar)
