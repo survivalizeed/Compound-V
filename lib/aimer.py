@@ -327,7 +327,10 @@ class Aimer:
                             continue
                         if self.closestSoldierMovementX == 0 and self.closestSoldierMovementY == 0:
                             continue
-                        self.move_mouse(int(self.closestSoldierMovementX), int(self.closestSoldierMovementY) - int(self.distance * 0.01))
+                        increment = self.distance * 0.01
+                        if self.distance < 100:
+                            increment = 0
+                        self.move_mouse(int(self.closestSoldierMovementX), int(self.closestSoldierMovementY) - int(increment))
                         if self.dodgeMode:
                             self.dodge = True
                         if self.autoshoot:
@@ -345,15 +348,15 @@ class Aimer:
         distance = self.FindDistance(Soldier.transform[3][0], Soldier.transform[3][1], Soldier.transform[3][2],
                 data.mytransform[3][0], data.mytransform[3][1], data.mytransform[3][2])
 
-        if Soldier.ptr == self.lastSoldier and distance > 50:                 
+        if Soldier.ptr == self.lastSoldier and distance > 45:                 
             soldierPosition = np.array([ transform[0], transform[1], transform[2]]) 
             if not np.array_equal(self.soldierPrevPosition, [0.,0.,0.]):
-                if(self.counter == 10):
+                if(self.counter == 7):
                     self.diff = soldierPosition - self.soldierPrevPosition
-                    self.diff *= distance / 40
-                    if self.diff[0] < 0.2 and self.diff[0] > -0.2 and self.diff[1] < 0.2 and self.diff[1] > -0.2 and self.diff[2] < 0.2 and self.diff[2] > -0.2:
+                    self.diff *= distance / 25
+                    if self.diff[0] < 0.1 and self.diff[0] > -0.1 and self.diff[1] < 0.1 and self.diff[1] > -0.1 and self.diff[2] < 0.1 and self.diff[2] > -0.1:
                         self.diff = np.array([0.,0.,0.])
-            if(self.counter == 10):
+            if(self.counter == 7):
                 self.soldierPrevPosition = soldierPosition 
                 self.counter = 0
             self.counter += 1
